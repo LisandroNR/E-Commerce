@@ -1,0 +1,57 @@
+<%- include('../partials/header') %>
+
+<main class="product-detail-container">
+    <nav class="breadcrumb">
+        <a href="/">Inicio</a> > <a href="/products">Camisetas</a> > <span>Detalle de Producto</span>
+    </nav>
+
+    <section class="main-product-section">
+        <div class="product-image-gallery">
+            <img src="/images/realmadrid.jpg" alt="Camiseta Local Real Madrid" id="main-image">
+            </div>
+
+        <div class="product-info-column">
+            <h1 class="product-title">Camiseta Real Madrid Local 2024/25</h1>
+            
+            <div class="product-price-points">
+                <span class="points-label">Precio:</span>
+                <span class="points-value">8500 Puntos</span>
+            </div>
+
+            <p class="product-description">
+                Sentí la gloria del Santiago Bernabéu con la nueva camiseta titular. 
+                Tecnología de ventilación avanzada, escudo bordado y el blanco inmaculado 
+                que representa la historia del club más grande de Europa. 100% poliéster reciclado.
+            </p>
+
+            <div class="purchase-actions">
+                <div class="quantity-selector">
+                    <label>Cantidad:</label>
+                    <input type="number" value="1" min="1">
+                </div>
+                <button class="btn-add-cart">
+                    <i class="fas fa-shopping-cart"></i> AGREGAR AL CARRITO
+                </button>
+            </div>
+            
+            <div class="product-meta">
+                <p><strong>Categoría:</strong> Europa</p>
+                <p><strong>Disponibilidad:</strong> En Stock</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section class="related-products">
+        <h2>Productos que te pueden interesar</h2>
+        <div class="grid-container">
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+        </div>
+    </section>
+</main>
+
+<%- include('../partials/footer') %>

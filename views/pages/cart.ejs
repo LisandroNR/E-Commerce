@@ -1,0 +1,106 @@
+<%- include('../partials/header') %>
+
+<main class="cart-container">
+    <h1 class="cart-page-title">Mi Carrito de Compras</h1>
+
+    <div class="cart-layout">
+        <section class="cart-items-section">
+            
+            <article class="cart-item">
+                <div class="item-image">
+                    <img src="/images/realmadrid.jpg" alt="Camiseta Real Madrid">
+                </div>
+                <div class="item-details">
+                    <h3 class="item-title">Camiseta Real Madrid Local 2024/25</h3>
+                    <p class="item-category">Europa</p>
+                    <p class="item-price">Precio: <span class="unit-price">8500</span> Puntos</p>
+                </div>
+                
+                <div class="item-quantity">
+                    <button class="qty-btn btn-minus" type="button"><i class="fas fa-minus"></i></button>
+                    <input type="number" class="qty-input" value="1" min="1" readonly>
+                    <button class="qty-btn btn-plus" type="button"><i class="fas fa-plus"></i></button>
+                </div>
+                
+                <div class="item-subtotal">
+                    <p>Subtotal: <strong class="row-subtotal">8500</strong> pts</p>
+                </div>
+                <button class="btn-remove-item" title="Quitar producto"><i class="fas fa-trash"></i></button>
+            </article>
+
+            <article class="cart-item">
+                <div class="item-image">
+                    <img src="/images/realmadrid.jpg" alt="Camiseta Alternativa">
+                </div>
+                <div class="item-details">
+                    <h3 class="item-title">Camiseta Boca Juniors Titular</h3>
+                    <p class="item-category">Liga Argentina</p>
+                    <p class="item-price">Precio: <span class="unit-price">7000</span> Puntos</p>
+                </div>
+                
+                <div class="item-quantity">
+                    <button class="qty-btn btn-minus" type="button"><i class="fas fa-minus"></i></button>
+                    <input type="number" class="qty-input" value="2" min="1" readonly>
+                    <button class="qty-btn btn-plus" type="button"><i class="fas fa-plus"></i></button>
+                </div>
+                
+                <div class="item-subtotal">
+                    <p>Subtotal: <strong class="row-subtotal">14000</strong> pts</p>
+                </div>
+                <button class="btn-remove-item" title="Quitar producto"><i class="fas fa-trash"></i></button>
+            </article>
+
+        </section>
+
+        <aside class="cart-summary-section">
+            <h2>Resumen del Pedido</h2>
+            
+            <div class="discount-box">
+                <label for="discount">¿Tenés un cupón?</label>
+                <div class="discount-input-group">
+                    <input type="text" id="discount" placeholder="Ej: CAMISETAS2026">
+                    <button type="button" class="btn-apply-discount">Aplicar</button>
+                </div>
+            </div>
+
+            <div class="summary-totals">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>22500 Puntos</span>
+                </div>
+                <div class="summary-row">
+                    <span>Descuento:</span>
+                    <span>0 Puntos</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>TOTAL:</span>
+                    <span class="final-total">22500 Puntos</span>
+                </div>
+            </div>
+
+            <div class="cart-actions">
+                <a href="#" class="btn-checkout"><i class="fas fa-lock"></i> IR A PAGAR</a>
+                
+                <a href="/" class="btn-continue-shopping"><i class="fas fa-arrow-left"></i> Volver al listado</a>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<script>
+    document.querySelectorAll('.cart-item').forEach(item => {
+        const btnMinus = item.querySelector('.btn-minus');
+        const btnPlus = item.querySelector('.btn-plus');
+        const inputQty = item.querySelector('.qty-input');
+        
+        btnMinus.addEventListener('click', () => {
+            if(inputQty.value > 1) inputQty.value = parseInt(inputQty.value) - 1;
+        });
+        
+        btnPlus.addEventListener('click', () => {
+            inputQty.value = parseInt(inputQty.value) + 1;
+        });
+    });
+</script>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+
+<main class="error-container" style="text-align: center; padding: 100px 5%;">
+    <div class="error-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 80px; color: #ffcc00; margin-bottom: 20px;"></i>
+        <h1 style="font-size: 40px; font-weight: 700;">¡Upps! Camiseta no encontrada</h1>
+        <p style="color: #777; font-size: 18px; margin-bottom: 40px;">
+            Parece que esa edición limitada se nos escapó del vestuario o el enlace es incorrecto.
+        </p>
+        <a href="/" class="btn-main" style="display: inline-block; width: auto; padding: 15px 40px;">VOLVER AL INICIO</a>
+    </div>
+
+    <hr style="margin: 80px 0; border: 0; border-top: 1px solid #eee;">
+
+    <section class="suggested-products">
+        <h2 style="margin-bottom: 30px; text-align: left;">Te sugerimos estas otras joyas:</h2>
+        <div class="grid-container" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+        </div>
+    </section>
+</main>
+
+<%- include('../partials/footer') %>

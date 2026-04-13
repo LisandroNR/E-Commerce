@@ -1,0 +1,721 @@
+/* ==========================================================================
+   CAMISETAS FC - HOJA DE ESTILOS PRINCIPAL
+   Fuente: Montserrat (Google Fonts)
+   ========================================================================== */
+
+/* --- CONFIGURACIÓN GENERAL --- */
+body {
+    background-color: #f5f5f5; /* Fondo gris muy claro para el resto del sitio */
+    color: #333333;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ==========================================================================
+   1. HEADER SUPERIOR Y NAVEGACIÓN
+   ========================================================================== */
+
+.top-header {
+    background-color: #1a1a1a; /* Fondo oscuro unificado */
+    height: 80px;              /* Altura fija para control total */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    border-bottom: 1px solid #333;
+    position: relative;        /* Asegura que el z-index funcione */
+    z-index: 100;              /* Siempre por encima de los banners */
+}
+
+/* --- CONTENEDOR DEL LOGO --- */
+.logo-container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- ESTA ES LA REGLA CLAVE PARA EL ENLACE --- */
+.logo-container a {
+    display: block;
+    height: 60px; /* Obligamos al enlace a medir 60px */
+}
+
+/* --- LA IMAGEN SVG DOMADA --- */
+.logo-container img {
+    height: 60px !important;  /* Freno de mano: no puede medir más que esto */
+    max-height: 60px;         /* Doble seguro */
+    width: auto;              /* Mantiene la proporción sin deformarse */
+    display: block;
+    filter: invert(1);        /* Sigue invirtiendo el color a blanco */
+}
+/* --- BUSCADOR --- */
+.search-bar {
+    display: flex;
+    width: 40%;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: #e0e0e0;
+}
+
+/* --- ENLACES DE USUARIO (Carrito, Login) --- */
+.user-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.user-actions a {
+    text-decoration: none;
+    color: #ffffff; /* Texto blanco para resaltar en fondo oscuro */
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.user-actions a:hover {
+    color: #00ceb0; /* Verde deportivo */
+}
+
+/* --- BARRA DE CATEGORÍAS (Oscura) --- */
+.category-nav-container {
+    background-color: #f5f5f5;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.category-nav-bar {
+    background-color: #333333;
+    border-radius: 12px;
+    padding: 15px 10px;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    justify-content: space-around;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.category-item {
+    text-decoration: none;
+    color: #dddddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 12px;
+    text-align: center;
+    flex: 1;
+    transition: color 0.3s;
+}
+
+.category-item:hover {
+    color: #ffffff;
+}
+
+.category-icon i {
+    font-size: 26px !important; 
+    color: #ffffff !important;  
+    display: block;
+    margin-bottom: 5px;
+}
+
+.separator {
+    width: 1px;
+    height: 30px;
+    background-color: #555555;
+}
+
+/* ==========================================================================
+   2. PÁGINA DE INICIO (HOME)
+   ========================================================================== */
+
+/* --- BANNERS (ProductHero) --- */
+.hero-section {
+    display: flex;
+    gap: 20px;
+    padding: 20px 5%;
+    background-color: #f5f5f5;
+}
+
+.hero-item {
+    flex: 1;
+    height: 350px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.hero-item:hover {
+    transform: scale(1.02); /* Efecto zoom suave */
+}
+
+.hero-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Filtro oscuro para leer el texto */
+}
+
+.hero-item h2 {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 30px;
+    text-transform: uppercase;
+    text-shadow: 2px 4px 8px rgba(0,0,0,0.7);
+    position: relative;
+    z-index: 1;
+    margin: 0;
+}
+
+/* --- GRILLA DE PRODUCTOS --- */
+.products-grid {
+    padding: 40px 5%;
+}
+
+.products-grid h2 {
+    text-align: left;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.grid-container {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Alinea a la izquierda si son pocos, o 'center' */
+}
+
+.product-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    width: 220px;
+    transition: box-shadow 0.3s;
+}
+
+.product-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.price {
+    color: #28a745;
+    font-weight: 700;
+    font-size: 1.2em;
+    display: block;
+    margin-top: 10px;
+}
+
+/* ==========================================================================
+   3. DETALLE DE PRODUCTO (US#6)
+   ========================================================================== */
+
+.product-detail-container {
+    padding: 20px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #333;
+}
+
+.main-product-section {
+    display: flex;
+    gap: 50px;
+    align-items: flex-start;
+    margin-bottom: 50px;
+}
+
+.product-image-gallery {
+    flex: 1.2;
+}
+
+.product-image-gallery img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.product-info-column {
+    flex: 1;
+}
+
+.product-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+.product-price-points {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 5px solid #00ceb0;
+}
+
+.points-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #28a745;
+}
+
+.product-description {
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.btn-add-cart {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.btn-add-cart:hover {
+    background-color: #00ceb0;
+    transform: translateY(-2px);
+}
+
+.section-divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 50px 0;
+}
+
+.related-products h2 {
+    margin-bottom: 30px;
+}
+
+/* ==========================================================================
+   4. FORMULARIOS (Login/Registro/CRUD)
+   ========================================================================== */
+
+.form-box {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 8px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-main {
+    background-color: #333;
+    color: white;
+    padding: 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 700;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+.btn-main:hover {
+    background-color: #00ceb0;
+}
+
+/* ==========================================================================
+   5. PÁGINA DE CARRITO (US#7)
+   ========================================================================== */
+
+.cart-container {
+    padding: 40px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cart-page-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.cart-layout {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* --- Lista de Productos --- */
+.cart-items-section {
+    flex: 2; /* Ocupa el doble de espacio que el resumen */
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+    border-bottom: none; /* Al último no le ponemos línea */
+}
+
+.item-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.item-details {
+    flex: 2;
+}
+
+.item-title {
+    font-size: 18px;
+    margin: 0 0 5px 0;
+}
+
+.item-category {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.item-price {
+    font-weight: 600;
+    color: #28a745;
+}
+
+/* --- Botones de Cantidad (+ y -) --- */
+.item-quantity {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background-color: #f5f5f5;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background 0.3s;
+}
+
+.qty-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.qty-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    background: white;
+}
+
+.item-subtotal {
+    flex: 1;
+    text-align: right;
+    font-size: 16px;
+}
+
+.btn-remove-item {
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.btn-remove-item:hover {
+    color: #a71d2a;
+}
+
+/* --- Resumen y Checkout (Lado derecho) --- */
+.cart-summary-section {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: sticky; /* Queda fijo si hacés scroll */
+    top: 20px;
+}
+
+.cart-summary-section h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* Bonus: Descuentos */
+.discount-box {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.discount-box label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.discount-input-group {
+    display: flex;
+}
+
+.discount-input-group input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px 0 0 6px;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+}
+
+.btn-apply-discount {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.total-row {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    border-top: 2px solid #eee;
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+.cart-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-checkout {
+    background-color: #00ceb0;
+    color: #1a1a1a;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-checkout:hover {
+    background-color: #00b399;
+    transform: translateY(-2px);
+}
+
+.btn-continue-shopping {
+    background-color: transparent;
+    color: #555;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #ddd;
+    transition: background 0.3s;
+}
+
+.btn-continue-shopping:hover {
+    background-color: #f5f5f5;
+    color: #1a1a1a;
+}
+
+/* ==========================================================================
+   6. DISEÑO RESPONSIVE (US#9 - MOBILE)
+   ========================================================================== */
+
+/* Esta regla se activa SOLO en pantallas de 768px o menos (Celulares y Tablets) */
+@media (max-width: 768px) {
+    
+    /* --- HEADER --- */
+    .top-header {
+        flex-direction: column; /* Apilamos logo, buscador y botones */
+        height: auto;           /* Dejamos que crezca según necesite */
+        padding: 15px 5%;
+        gap: 15px;
+    }
+
+    .search-bar {
+        width: 100%; /* El buscador ocupa todo el ancho del celu */
+    }
+
+    .user-actions {
+        width: 100%;
+        justify-content: space-between; /* Separamos los botones */
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .user-actions a {
+        font-size: 13px; /* Achicamos un poquito la letra */
+    }
+
+    /* --- CATEGORÍAS --- */
+    .category-nav-bar {
+        flex-wrap: wrap; /* Permitimos que las categorías caigan en varias filas */
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .category-item {
+        flex: 1 1 20%; /* Forzamos a que entren 3 o 4 por fila */
+    }
+
+    .separator {
+        display: none; /* Ocultamos las barritas divisorias en mobile porque rompen el diseño */
+    }
+
+    /* --- HOME: BANNERS --- */
+    .hero-section {
+        flex-direction: column; /* Banners uno arriba del otro */
+        padding: 10px 5%;
+    }
+
+    .hero-item {
+        height: 200px; /* Los hacemos un poco más bajos para que no ocupen toda la pantalla */
+    }
+
+    /* --- HOME: GRILLA DE PRODUCTOS --- */
+    .grid-container {
+        justify-content: center; /* Centramos los productos */
+    }
+
+    .product-card {
+        width: 100%; /* Ocupan todo el ancho (como en la foto de diseño) */
+        max-width: 320px;
+    }
+
+    /* --- DETALLE DE PRODUCTO (US#6) --- */
+    .main-product-section {
+        flex-direction: column; /* Foto arriba, info abajo */
+        gap: 30px;
+    }
+
+    /* --- CARRITO (US#7) --- */
+    .cart-layout {
+        flex-direction: column; /* Lista arriba, ticket de pago abajo */
+    }
+
+    .cart-items-section, .cart-summary-section {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .cart-item {
+        flex-direction: column; /* Apilamos la foto, info y botones del item */
+        text-align: center;
+        gap: 15px;
+    }
+
+    .item-quantity {
+        justify-content: center;
+    }
+
+    .item-subtotal {
+        text-align: center;
+    }
+}

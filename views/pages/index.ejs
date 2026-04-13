@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+
+<main>
+    <section class="hero-section">
+        
+        <div class="hero-item" style="background-image: url('/images/banner1.jpg');">
+            <h2>Ultimo ingreso retro</h2>
+        </div>
+        
+        <div class="hero-item" style="background-image: url('/images/banner2.jpg');">
+            <h2>Ultimo ingreso actual</h2>
+        </div>
+
+    </section>
+
+    <section class="products-grid">
+        <h2>Nuestros Productos</h2>
+        <div class="grid-container">
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+            <%- include('../partials/productCard') %>
+        </div>
+    </section>
+</main>
+
+<%- include('../partials/footer') %>
