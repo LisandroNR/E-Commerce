@@ -719,3 +719,36 @@ body {
         text-align: center;
     }
 }
+
+/* ==========================================================================
+   7. PÁGINA 404 (US#2)
+   ========================================================================== */
+
+.error-404-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 60vh;
+    padding: 50px 5%;
+}
+
+.error-content h1 {
+    font-size: 120px;
+    color: #00ceb0; /* El color principal de tu marca */
+    margin: 0;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.error-content h2 {
+    font-size: 32px;
+    color: #1a1a1a;
+    margin: 10px 0 20px;
+}
+
+.error-content p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 40px;
+}
