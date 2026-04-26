@@ -1,3 +1,5 @@
+// controllers/mainController.js
+
 const mainController = {
     home: (req, res) => {
         res.render('pages/index');
