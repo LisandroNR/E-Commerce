@@ -1,106 +1,46 @@
 <%- include('../partials/header') %>
 
-<main class="cart-container">
-    <h1 class="cart-page-title">Mi Carrito de Compras</h1>
+<main style="padding: 50px 5%; min-height: 60vh;">
+    <h1 style="text-align: center; margin-bottom: 30px;">Tu Carrito de Compras</h1>
 
-    <div class="cart-layout">
-        <section class="cart-items-section">
-            
-            <article class="cart-item">
-                <div class="item-image">
-                    <img src="/images/realmadrid.jpg" alt="Camiseta Real Madrid">
-                </div>
-                <div class="item-details">
-                    <h3 class="item-title">Camiseta Real Madrid Local 2024/25</h3>
-                    <p class="item-category">Europa</p>
-                    <p class="item-price">Precio: <span class="unit-price">8500</span> Puntos</p>
-                </div>
-                
-                <div class="item-quantity">
-                    <button class="qty-btn btn-minus" type="button"><i class="fas fa-minus"></i></button>
-                    <input type="number" class="qty-input" value="1" min="1" readonly>
-                    <button class="qty-btn btn-plus" type="button"><i class="fas fa-plus"></i></button>
-                </div>
-                
-                <div class="item-subtotal">
-                    <p>Subtotal: <strong class="row-subtotal">8500</strong> pts</p>
-                </div>
-                <button class="btn-remove-item" title="Quitar producto"><i class="fas fa-trash"></i></button>
-            </article>
+    <% if (cartItems.length === 0) { %>
+        <div style="text-align: center; padding: 50px; background: #f9f9f9; border-radius: 10px;">
+            <h2>Tu carrito está vacío 😔</h2>
+            <p>¡Es un buen momento para comprarte una camiseta nueva!</p>
+            <a href="/" style="display: inline-block; padding: 10px 20px; background: #00ceb0; color: #1a1a1a; text-decoration: none; border-radius: 5px; margin-top: 15px; font-weight: bold;">Ir a la tienda</a>
+        </div>
+    <% } else { %>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <% cartItems.forEach(item => { %>
+                <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
+                    <img src="<%= item.image %>" alt="<%= item.name %>" style="width: 80px; border-radius: 5px;">
+                    <div style="flex: 1; margin-left: 20px;">
+                        <h3><%= item.name %></h3>
+                        <p>Precio Unitario: $<%= item.price %></p>
+                        <p><strong>Subtotal: $<%= item.subtotal %></strong></p>
+                    </div>
 
-            <article class="cart-item">
-                <div class="item-image">
-                    <img src="/images/realmadrid.jpg" alt="Camiseta Alternativa">
+                    <form action="/cart/update" method="POST" style="display: flex; gap: 10px; align-items: center;">
+                        <input type="hidden" name="productId" value="<%= item.id %>">
+                        <button type="submit" name="action" value="decrease" style="padding: 5px 15px; cursor: pointer;">-</button>
+                        <span><%= item.quantity %></span>
+                        <button type="submit" name="action" value="increase" style="padding: 5px 15px; cursor: pointer;">+</button>
+                    </form>
                 </div>
-                <div class="item-details">
-                    <h3 class="item-title">Camiseta Boca Juniors Titular</h3>
-                    <p class="item-category">Liga Argentina</p>
-                    <p class="item-price">Precio: <span class="unit-price">7000</span> Puntos</p>
-                </div>
-                
-                <div class="item-quantity">
-                    <button class="qty-btn btn-minus" type="button"><i class="fas fa-minus"></i></button>
-                    <input type="number" class="qty-input" value="2" min="1" readonly>
-                    <button class="qty-btn btn-plus" type="button"><i class="fas fa-plus"></i></button>
-                </div>
-                
-                <div class="item-subtotal">
-                    <p>Subtotal: <strong class="row-subtotal">14000</strong> pts</p>
-                </div>
-                <button class="btn-remove-item" title="Quitar producto"><i class="fas fa-trash"></i></button>
-            </article>
+            <% }) %>
 
-        </section>
-
-        <aside class="cart-summary-section">
-            <h2>Resumen del Pedido</h2>
-            
-            <div class="discount-box">
-                <label for="discount">¿Tenés un cupón?</label>
-                <div class="discount-input-group">
-                    <input type="text" id="discount" placeholder="Ej: CAMISETAS2026">
-                    <button type="button" class="btn-apply-discount">Aplicar</button>
-                </div>
+            <div style="text-align: right; margin-top: 20px; font-size: 24px;">
+                <strong>TOTAL: $<%= total %></strong>
             </div>
 
-            <div class="summary-totals">
-                <div class="summary-row">
-                    <span>Subtotal:</span>
-                    <span>22500 Puntos</span>
-                </div>
-                <div class="summary-row">
-                    <span>Descuento:</span>
-                    <span>0 Puntos</span>
-                </div>
-                <div class="summary-row total-row">
-                    <span>TOTAL:</span>
-                    <span class="final-total">22500 Puntos</span>
-                </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <form action="/cart/empty" method="POST">
+                    <button type="submit" style="padding: 10px 20px; background: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer;">Vaciar Carrito</button>
+                </form>
+                <a href="/checkout" style="padding: 10px 20px; background: #00ceb0; color: #1a1a1a; text-decoration: none; border-radius: 5px; font-weight: bold;">Ir a Pagar</a>
             </div>
-
-            <div class="cart-actions">
-                <a href="#" class="btn-checkout"><i class="fas fa-lock"></i> IR A PAGAR</a>
-                
-                <a href="/" class="btn-continue-shopping"><i class="fas fa-arrow-left"></i> Volver al listado</a>
-            </div>
-        </aside>
-    </div>
+        </div>
+    <% } %>
 </main>
-
-<script>
-    document.querySelectorAll('.cart-item').forEach(item => {
-        const btnMinus = item.querySelector('.btn-minus');
-        const btnPlus = item.querySelector('.btn-plus');
-        const inputQty = item.querySelector('.qty-input');
-        
-        btnMinus.addEventListener('click', () => {
-            if(inputQty.value > 1) inputQty.value = parseInt(inputQty.value) - 1;
-        });
-        
-        btnPlus.addEventListener('click', () => {
-            inputQty.value = parseInt(inputQty.value) + 1;
-        });
-    });
-</script>
 
 <%- include('../partials/footer') %>

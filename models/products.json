@@ -1,0 +1,20 @@
+[
+    {
+        "id": "1",
+        "name": "Camiseta Titular Boca Juniors",
+        "price": 50000,
+        "image": "https://via.placeholder.com/150/003366/FFFF00?text=Boca"
+    },
+    {
+        "id": "2",
+        "name": "Camiseta Titular River Plate",
+        "price": 50000,
+        "image": "https://via.placeholder.com/150/FFFFFF/FF0000?text=River"
+    },
+    {
+        "id": "3",
+        "name": "Camiseta Titular Racing",
+        "price": 45000,
+        "image": "https://via.placeholder.com/150/87CEEB/FFFFFF?text=Racing"
+    }
+]

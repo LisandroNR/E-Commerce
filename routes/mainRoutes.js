@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const mainController = require('../controllers/mainController');
 
-// Importamos el controlador (Ajustado a tu mayúscula actual)
-const mainController = require('../controllers/MainController');
-
-// Definimos las rutas
 router.get('/', mainController.home);
 router.get('/product', mainController.product);
-router.get('/cart', mainController.cart);
+
+// RUTAS DEL CARRITO
+router.get('/cart', mainController.cart); // Ver el carrito
+router.post('/cart/add', mainController.addToCart); // Agregar producto
+router.post('/cart/update', mainController.updateCart); // Sumar o restar
+router.post('/cart/empty', mainController.emptyCart); // Vaciar todo
+
 router.get('/checkout', mainController.checkout);
 router.get('/login', mainController.login);
 router.get('/register', mainController.register);
