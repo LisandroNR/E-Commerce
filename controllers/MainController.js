@@ -8,14 +8,23 @@ const getProducts = () => {
 };
 
 const mainController = {
-    home: (req, res) => { res.render('pages/index'); },
-    
-    // Vista del producto (Simulada por ahora, agregamos un botón para probar)
-    product: (req, res) => { 
+    // ==========================================
+    // USER STORY #6 - HOME (PRODUCTOS SUGERIDOS)
+    // ==========================================
+    home: (req, res) => { 
+        // 1. Leemos todos los productos
         const products = getProducts();
-        res.render('pages/product', { products }); // Le pasamos los productos para que pueda agregar
+        
+        // 2. BONUS: Mezclamos el array al azar (Shuffle)
+        const shuffled = products.sort(() => 0.5 - Math.random());
+        
+        // 3. Agarramos hasta 5 productos (si hay menos, agarra los que haya)
+        const suggestedProducts = shuffled.slice(0, 5);
+        
+        // 4. Se los mandamos a la vista
+        res.render('pages/index', { suggestedProducts }); 
     },
-    
+
     // ==========================================
     // LÓGICA DEL CARRITO (US#4)
     // ==========================================
@@ -24,9 +33,15 @@ const mainController = {
         let cartItems = [];
         let total = 0;
 
+        // Red de seguridad: si no existe el carrito en la sesión, lo creamos vacío
+        if (!req.session.cart) {
+            req.session.cart = [];
+        }
+
         // Cruzamos los IDs de la sesión con los datos reales del JSON
         req.session.cart.forEach(item => {
-            const productData = products.find(p => p.id === item.productId);
+            // Usamos == en lugar de === por si el ID viene como texto desde el HTML y como número desde el JSON
+            const productData = products.find(p => p.id == item.productId); 
             if (productData) {
                 const subtotal = productData.price * item.quantity;
                 total += subtotal;
@@ -39,8 +54,14 @@ const mainController = {
 
     addToCart: (req, res) => {
         const productId = req.body.productId;
+        
+        // Red de seguridad
+        if (!req.session.cart) {
+            req.session.cart = [];
+        }
+        
         const cart = req.session.cart;
-        const productIndex = cart.findIndex(p => p.productId === productId);
+        const productIndex = cart.findIndex(p => p.productId == productId);
 
         if (productIndex !== -1) {
             cart[productIndex].quantity += 1; // Si existe, suma 1
@@ -52,8 +73,8 @@ const mainController = {
 
     updateCart: (req, res) => {
         const { productId, action } = req.body;
-        const cart = req.session.cart;
-        const productIndex = cart.findIndex(p => p.productId === productId);
+        const cart = req.session.cart || [];
+        const productIndex = cart.findIndex(p => p.productId == productId);
 
         if (productIndex !== -1) {
             if (action === 'increase') {
@@ -72,8 +93,11 @@ const mainController = {
         req.session.cart = []; // Reinicia el carrito
         res.redirect('/cart');
     },
-    // ==========================================
 
+    // ==========================================
+    // OTRAS VISTAS ESTÁTICAS Y US#5
+    // ==========================================
+    product: (req, res) => { res.render('pages/product'); }, // <-- ACÁ ESTÁ LA SOLUCIÓN AL ERROR
     checkout: (req, res) => { res.render('pages/checkout'); },
     login: (req, res) => { res.render('pages/login'); },
     register: (req, res) => { res.render('pages/register'); },
