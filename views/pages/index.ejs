@@ -2,7 +2,6 @@
 
 <main>
     <section class="hero-section">
-        
         <div class="hero-item" style="background-image: url('/images/banner1.jpg');">
             <h2>Ultimo ingreso retro</h2>
         </div>
@@ -10,21 +9,47 @@
         <div class="hero-item" style="background-image: url('/images/banner2.jpg');">
             <h2>Ultimo ingreso actual</h2>
         </div>
+    </section>
 
-<!-- Sección de Productos Sugeridos (US#6) -->
-    <section>
+    <section style="padding: 20px 5%; margin-bottom: 20px;">
+        <h2 style="margin-bottom: 30px; border-left: 5px solid #00ceb0; padding-left: 15px;">Los más pedidos</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            
+            <% bestsellers.forEach(product => { %>
+                <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-top: 3px solid #ffaa00; position: relative;">
+                    
+                    <a href="/products/<%= product.id %>" style="text-decoration: none; color: inherit;">
+                        
+                        <img src="<%= product.image || 'https://via.placeholder.com/150/CCCCCC/000000?text=Sin+Imagen' %>" 
+                             alt="<%= product.name %>" 
+                             style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
+                        
+                        <span style="background-color: #ffaa00; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; position: absolute; top: 15px; left: 15px;">🔥 Top Ventas</span>
+                        
+                        <h3 style="font-size: 18px; margin-top: 15px;"><%= product.name %></h3>
+                        <p style="color: #00ceb0; font-weight: bold; font-size: 20px; margin: 10px 0;">$<%= product.price %></p>
+                    </a>
+
+                    <form action="/cart/add" method="POST" style="margin-top: 15px;">
+                        <input type="hidden" name="productId" value="<%= product.id %>">
+                        <button type="submit" style="width: 100%; padding: 10px; border: 1px solid #00ceb0; background: transparent; color: #00ceb0; font-weight: bold; border-radius: 5px; cursor: pointer;">Añadir al carrito</button>
+                    </form>
+                </article>
+            <% }) %>
+
+        </div>
+    </section>
+
+    <section style="padding: 20px 5%; margin-bottom: 50px;">
         <h2 style="margin-bottom: 30px; border-left: 5px solid #00ceb0; padding-left: 15px;">Te puede interesar</h2>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
             
-            <!-- Bucle que recorre los productos que mandó el controlador -->
             <% suggestedProducts.forEach(product => { %>
                 <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     
-                    <!-- Enlace al detalle del producto -->
                     <a href="/products/<%= product.id %>" style="text-decoration: none; color: inherit;">
-                        
-                        <!-- BONUS: Imagen de Fallback (Si no tiene imagen, pone una gris) -->
                         <img src="<%= product.image || 'https://via.placeholder.com/150/CCCCCC/000000?text=Sin+Imagen' %>" 
                              alt="<%= product.name %>" 
                              style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
@@ -33,7 +58,6 @@
                         <p style="color: #00ceb0; font-weight: bold; font-size: 20px; margin: 10px 0;">$<%= product.price %></p>
                     </a>
 
-                    <!-- Botón para agregar al carrito (reutilizado) -->
                     <form action="/cart/add" method="POST" style="margin-top: 15px;">
                         <input type="hidden" name="productId" value="<%= product.id %>">
                         <button type="submit" style="width: 100%; padding: 10px; border: 1px solid #00ceb0; background: transparent; color: #00ceb0; font-weight: bold; border-radius: 5px; cursor: pointer;">Añadir al carrito</button>
@@ -44,52 +68,3 @@
         </div>
     </section>
 </main>
-
-<section style="margin-top: 40px;">
-    <div style="text-align: center; margin-bottom: 40px;">
-        <div style="display: inline-block; padding: 20px; border: 2px dashed #00ceb0; border-radius: 10px;">
-            <p style="margin-bottom: 15px; font-weight: bold; color: #00ceb0;">🛠️ Espacio de Pruebas (User Story #4)</p>
-            <form action="/cart/add" method="POST">
-                <input type="hidden" name="productId" value="1">
-                <button type="submit" style="padding: 12px 25px; background: #00ceb0; color: #1a1a1a; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
-                    🛒 Agregar Camiseta de Boca al Carrito
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <h2 style="margin-bottom: 20px; border-left: 5px solid #00ceb0; padding-left: 15px;">Nuestros Productos</h2>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-        
-        <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-            <img src="https://via.placeholder.com/150/003366/FFFF00?text=Boca" alt="Boca" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
-            <h3>Titular Boca Juniors</h3>
-            <p style="color: #00ceb0; font-weight: bold; font-size: 20px; margin: 10px 0;">$50.000</p>
-            <form action="/cart/add" method="POST">
-                <input type="hidden" name="productId" value="1">
-                <button type="submit" style="width: 100%; padding: 10px; border: 1px solid #00ceb0; background: transparent; color: #00ceb0; font-weight: bold; border-radius: 5px; cursor: pointer;">Añadir al carrito</button>
-            </form>
-        </article>
-
-        <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-            <img src="https://via.placeholder.com/150/FFFFFF/FF0000?text=River" alt="River" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
-            <h3>Titular River Plate</h3>
-            <p style="color: #00ceb0; font-weight: bold; font-size: 20px; margin: 10px 0;">$50.000</p>
-            <form action="/cart/add" method="POST">
-                <input type="hidden" name="productId" value="2">
-                <button type="submit" style="width: 100%; padding: 10px; border: 1px solid #00ceb0; background: transparent; color: #00ceb0; font-weight: bold; border-radius: 5px; cursor: pointer;">Añadir al carrito</button>
-            </form>
-        </article>
-
-        <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-            <img src="https://via.placeholder.com/150/87CEEB/FFFFFF?text=Racing" alt="Racing" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
-            <h3>Titular Racing Club</h3>
-            <p style="color: #00ceb0; font-weight: bold; font-size: 20px; margin: 10px 0;">$45.000</p>
-            <form action="/cart/add" method="POST">
-                <input type="hidden" name="productId" value="3">
-                <button type="submit" style="width: 100%; padding: 10px; border: 1px solid #00ceb0; background: transparent; color: #00ceb0; font-weight: bold; border-radius: 5px; cursor: pointer;">Añadir al carrito</button>
-            </form>
-        </article>
-    </div>
-</section>
-<%- include('../partials/footer') %>

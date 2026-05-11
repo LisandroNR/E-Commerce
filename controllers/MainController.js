@@ -12,17 +12,26 @@ const mainController = {
     // USER STORY #6 - HOME (PRODUCTOS SUGERIDOS)
     // ==========================================
     home: (req, res) => { 
-        // 1. Leemos todos los productos
         const products = getProducts();
         
-        // 2. BONUS: Mezclamos el array al azar (Shuffle)
+        // ==========================================
+        // US#7: LOS MÁS PEDIDOS (Flag + Aleatorio)
+        // ==========================================
+        // 1. Filtramos solo los que tienen el flag "bestseller" en true
+        const bestsellers = products.filter(product => product.bestseller === true);
+        // 2. Los mezclamos
+        const bestsellersShuffled = bestsellers.sort(() => 0.5 - Math.random());
+        // 3. Agarramos hasta 10
+        const topBestsellers = bestsellersShuffled.slice(0, 10);
+
+        // ==========================================
+        // US#6: TE PUEDE INTERESAR
+        // ==========================================
         const shuffled = products.sort(() => 0.5 - Math.random());
-        
-        // 3. Agarramos hasta 5 productos (si hay menos, agarra los que haya)
         const suggestedProducts = shuffled.slice(0, 5);
         
-        // 4. Se los mandamos a la vista
-        res.render('pages/index', { suggestedProducts }); 
+        // Mandamos AMBAS listas a la vista
+        res.render('pages/index', { suggestedProducts, bestsellers: topBestsellers }); 
     },
 
     // ==========================================
