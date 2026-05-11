@@ -1,63 +1,48 @@
 <%- include('../partials/header') %>
 
-<main class="product-detail-container">
-    <nav class="breadcrumb">
-        <a href="/">Inicio</a> > <a href="/products">Camisetas</a> > <span>Detalle de Producto</span>
-    </nav>
+<main style="padding: 50px 5%; min-height: 70vh; background-color: #f4f4f4;">
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 40px; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 1000px; margin: 0 auto;">
+        
+        <div style="flex: 1; min-width: 300px; text-align: center;">
+            <img src="<%= product.image || 'https://via.placeholder.com/400/CCCCCC/000000?text=Sin+Imagen+Disponible' %>" 
+                 alt="<%= product.name %>" 
+                 style="width: 100%; max-width: 400px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        </div>
 
-    <section class="main-product-section">
-        <div class="product-image-gallery">
-            <img src="/images/realmadrid.jpg" alt="Camiseta Local Real Madrid" id="main-image">
-            </div>
-
-        <div class="product-info-column">
-            <h1 class="product-title">Camiseta Real Madrid Local 2024/25</h1>
+        <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center;">
             
-            <div class="product-price-points">
-                <span class="points-label">Precio:</span>
-                <span class="points-value">8500 Puntos</span>
-            </div>
-
-            <p class="product-description">
-                Sentí la gloria del Santiago Bernabéu con la nueva camiseta titular. 
-                Tecnología de ventilación avanzada, escudo bordado y el blanco inmaculado 
-                que representa la historia del club más grande de Europa. 100% poliéster reciclado.
+            <span style="color: #666; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; font-weight: bold;">
+                <%= product.category || 'Sin categoría' %>
+            </span>
+            
+            <h1 style="font-size: 32px; color: #1a1a1a; margin: 10px 0;">
+                <%= product.name %>
+            </h1>
+            
+            <p style="color: #00ceb0; font-size: 36px; font-weight: bold; margin: 20px 0;">
+                $<%= product.price %>
+            </p>
+            
+            <p style="color: #444; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                <%= product.description || 'Este producto aún no tiene una descripción detallada. ¡Pero te aseguramos que es de excelente calidad!' %>
             </p>
 
-            <div class="purchase-actions">
-                <div class="quantity-selector">
-                    <label>Cantidad:</label>
-                    <input type="number" value="1" min="1">
-                </div>
-                <button class="btn-add-cart">
-                    <i class="fas fa-shopping-cart"></i> AGREGAR AL CARRITO
+            <form action="/cart/add" method="POST" style="margin-top: auto;">
+                <input type="hidden" name="productId" value="<%= product.id %>">
+                <button type="submit" style="width: 100%; max-width: 300px; padding: 15px; background: #00ceb0; color: #1a1a1a; border: none; font-size: 18px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s; text-transform: uppercase;">
+                    🛒 Agregar al carrito
                 </button>
-            </div>
-            
-            <div class="product-meta">
-                <p><strong>Categoría:</strong> Europa</p>
-                <p><strong>Disponibilidad:</strong> En Stock</p>
-            </div>
-        </div>
-    </section>
+            </form>
 
-    <hr class="section-divider">
-
-    <section class="related-products">
-        <h2>Productos que te pueden interesar</h2>
-        <div class="grid-container">
-            <%- include('../partials/productCard') %>
-            <%- include('../partials/productCard') %>
-            <%- include('../partials/productCard') %>
-            <%- include('../partials/productCard') %>
         </div>
-    </section>
-    <section style="padding: 20px 5%; margin-top: 50px; background-color: #f9f9f9; border-top: 1px solid #eee;">
+    </div>
+
+    <section style="margin-top: 60px; padding-top: 40px; border-top: 2px solid #eaeaea;">
         <h2 style="margin-bottom: 30px; border-left: 5px solid #00ceb0; padding-left: 15px;">Productos relacionados</h2>
 
         <% if (relatedProducts && relatedProducts.length > 0) { %>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                
                 <% relatedProducts.forEach(relProduct => { %>
                     <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                         <a href="/products/<%= relProduct.id %>" style="text-decoration: none; color: inherit;">
@@ -73,15 +58,14 @@
                         </form>
                     </article>
                 <% }) %>
-
             </div>
-        
         <% } else { %>
             <p style="color: #666; font-size: 18px; text-align: center; padding: 30px; border: 2px dashed #ccc; border-radius: 10px; background: white;">
                 No hay productos relacionados disponibles por el momento 😔
             </p>
         <% } %>
     </section>
+
 </main>
 
 <%- include('../partials/footer') %>
