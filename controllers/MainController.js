@@ -87,9 +87,21 @@ const mainController = {
 
     addToCart: (req, res) => {
         const productId = req.body.productId;
+        const products = getProducts();
+        
+        // 1. Buscamos el producto en la base de datos
+        const productData = products.find(p => p.id == productId);
+
+        // 2. VALIDACIÓN US#11: Si no existe o tiene stock 0, rechazamos la acción
+        if (!productData || productData.stock === 0) {
+            return res.redirect('/'); // Lo devolvemos al inicio sin agregar nada
+        }
+
+        // Si pasó la validación, sigue el proceso normal del carrito
         if (!req.session.cart) {
             req.session.cart = [];
         }
+        
         const cart = req.session.cart;
         const productIndex = cart.findIndex(p => p.productId == productId);
 
