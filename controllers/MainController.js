@@ -9,29 +9,56 @@ const getProducts = () => {
 
 const mainController = {
     // ==========================================
-    // USER STORY #6 - HOME (PRODUCTOS SUGERIDOS)
+    // US#6 y US#7 - HOME (Sugeridos y Más Pedidos)
     // ==========================================
     home: (req, res) => { 
         const products = getProducts();
         
-        // ==========================================
-        // US#7: LOS MÁS PEDIDOS (Flag + Aleatorio)
-        // ==========================================
-        // 1. Filtramos solo los que tienen el flag "bestseller" en true
         const bestsellers = products.filter(product => product.bestseller === true);
-        // 2. Los mezclamos
         const bestsellersShuffled = bestsellers.sort(() => 0.5 - Math.random());
-        // 3. Agarramos hasta 10
         const topBestsellers = bestsellersShuffled.slice(0, 10);
 
-        // ==========================================
-        // US#6: TE PUEDE INTERESAR
-        // ==========================================
         const shuffled = products.sort(() => 0.5 - Math.random());
         const suggestedProducts = shuffled.slice(0, 5);
         
-        // Mandamos AMBAS listas a la vista
         res.render('pages/index', { suggestedProducts, bestsellers: topBestsellers }); 
+    },
+
+    // ==========================================
+    // US#8 y US#9 - DETALLE DE PRODUCTO
+    // ==========================================
+    product: (req, res) => { 
+        const products = getProducts();
+        const productId = req.params.id; 
+        
+        const product = products.find(p => p.id == productId);
+
+        if (!product) {
+            return res.render('pages/404');
+        }
+
+        let relatedProducts = [];
+        if (product.category) {
+            const related = products.filter(p => p.category === product.category && p.id != productId);
+            const relatedShuffled = related.sort(() => 0.5 - Math.random());
+            relatedProducts = relatedShuffled.slice(0, 4);
+        }
+
+        res.render('pages/product', { product, relatedProducts }); 
+    },
+
+    // ==========================================
+    // US#10: VISTA DE CATEGORÍAS (La que tiraba error)
+    // ==========================================
+    category: (req, res) => {
+        const products = getProducts();
+        const categoryName = req.params.category; 
+
+        const filteredProducts = products.filter(p => 
+            p.category && p.category.toLowerCase() === categoryName.toLowerCase()
+        );
+
+        res.render('pages/category', { categoryName, filteredProducts });
     },
 
     // ==========================================
@@ -42,14 +69,11 @@ const mainController = {
         let cartItems = [];
         let total = 0;
 
-        // Red de seguridad: si no existe el carrito en la sesión, lo creamos vacío
         if (!req.session.cart) {
             req.session.cart = [];
         }
 
-        // Cruzamos los IDs de la sesión con los datos reales del JSON
         req.session.cart.forEach(item => {
-            // Usamos == en lugar de === por si el ID viene como texto desde el HTML y como número desde el JSON
             const productData = products.find(p => p.id == item.productId); 
             if (productData) {
                 const subtotal = productData.price * item.quantity;
@@ -63,19 +87,16 @@ const mainController = {
 
     addToCart: (req, res) => {
         const productId = req.body.productId;
-        
-        // Red de seguridad
         if (!req.session.cart) {
             req.session.cart = [];
         }
-        
         const cart = req.session.cart;
         const productIndex = cart.findIndex(p => p.productId == productId);
 
         if (productIndex !== -1) {
-            cart[productIndex].quantity += 1; // Si existe, suma 1
+            cart[productIndex].quantity += 1; 
         } else {
-            cart.push({ productId: productId, quantity: 1 }); // Si no existe, lo agrega
+            cart.push({ productId: productId, quantity: 1 }); 
         }
         res.redirect('/cart');
     },
@@ -91,7 +112,7 @@ const mainController = {
             } else if (action === 'decrease') {
                 cart[productIndex].quantity -= 1;
                 if (cart[productIndex].quantity <= 0) {
-                    cart.splice(productIndex, 1); // Lo elimina si llega a 0
+                    cart.splice(productIndex, 1); 
                 }
             }
         }
@@ -99,42 +120,13 @@ const mainController = {
     },
 
     emptyCart: (req, res) => {
-        req.session.cart = []; // Reinicia el carrito
+        req.session.cart = []; 
         res.redirect('/cart');
     },
 
     // ==========================================
     // OTRAS VISTAS ESTÁTICAS Y US#5
     // ==========================================
-    product: (req, res) => { 
-        const products = getProducts();
-        const productId = req.params.id; // Agarramos el ID de la URL
-        
-        // 1. Buscamos el producto principal que el usuario quiere ver
-        // Usamos == para que compare bien el ID de la URL (texto) con el del JSON (número)
-        const product = products.find(p => p.id == productId);
-
-        // Si el usuario pone un ID que no existe, lo mandamos al 404
-        if (!product) {
-            return res.render('pages/404');
-        }
-
-        // 2. Buscamos los relacionados (Misma categoría, pero que NO sea el mismo producto)
-        let relatedProducts = [];
-        
-        if (product.category) {
-            const related = products.filter(p => p.category === product.category && p.id != productId);
-            
-            // 3. Los mezclamos al azar (BONUS)
-            const relatedShuffled = related.sort(() => 0.5 - Math.random());
-            
-            // 4. Agarramos hasta 4 como máximo
-            relatedProducts = relatedShuffled.slice(0, 4);
-        }
-
-        // Mandamos a la vista el producto principal Y los relacionados
-        res.render('pages/product', { product, relatedProducts }); 
-    },
     checkout: (req, res) => { res.render('pages/checkout'); },
     login: (req, res) => { res.render('pages/login'); },
     register: (req, res) => { res.render('pages/register'); },
