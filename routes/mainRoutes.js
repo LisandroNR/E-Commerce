@@ -3,7 +3,7 @@ const router = express.Router();
 const mainController = require('../controllers/mainController');
 
 router.get('/', mainController.home);
-router.get('/product', mainController.product);
+router.get('/products/:id', mainController.product);
 
 // RUTAS DEL CARRITO
 router.get('/cart', mainController.cart); // Ver el carrito

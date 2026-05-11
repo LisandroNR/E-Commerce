@@ -106,7 +106,35 @@ const mainController = {
     // ==========================================
     // OTRAS VISTAS ESTÁTICAS Y US#5
     // ==========================================
-    product: (req, res) => { res.render('pages/product'); }, // <-- ACÁ ESTÁ LA SOLUCIÓN AL ERROR
+    product: (req, res) => { 
+        const products = getProducts();
+        const productId = req.params.id; // Agarramos el ID de la URL
+        
+        // 1. Buscamos el producto principal que el usuario quiere ver
+        // Usamos == para que compare bien el ID de la URL (texto) con el del JSON (número)
+        const product = products.find(p => p.id == productId);
+
+        // Si el usuario pone un ID que no existe, lo mandamos al 404
+        if (!product) {
+            return res.render('pages/404');
+        }
+
+        // 2. Buscamos los relacionados (Misma categoría, pero que NO sea el mismo producto)
+        let relatedProducts = [];
+        
+        if (product.category) {
+            const related = products.filter(p => p.category === product.category && p.id != productId);
+            
+            // 3. Los mezclamos al azar (BONUS)
+            const relatedShuffled = related.sort(() => 0.5 - Math.random());
+            
+            // 4. Agarramos hasta 4 como máximo
+            relatedProducts = relatedShuffled.slice(0, 4);
+        }
+
+        // Mandamos a la vista el producto principal Y los relacionados
+        res.render('pages/product', { product, relatedProducts }); 
+    },
     checkout: (req, res) => { res.render('pages/checkout'); },
     login: (req, res) => { res.render('pages/login'); },
     register: (req, res) => { res.render('pages/register'); },

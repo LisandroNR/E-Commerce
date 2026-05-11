@@ -4,19 +4,37 @@
     "name": "Titular Boca Juniors",
     "price": 50000,
     "image": "https://via.placeholder.com/150/003366/FFFF00?text=Boca",
-    "bestseller": true 
+    "bestseller": true,
+    "category": "Liga Argentina" 
 },
     {
         "id": "2",
         "name": "Camiseta Titular River Plate",
         "price": 50000,
         "image": "https://via.placeholder.com/150/FFFFFF/FF0000?text=River",
-        "bestseller": true 
+        "bestseller": true,
+        "category": "Liga Argentina" 
     },
     {
         "id": "3",
         "name": "Camiseta Titular Racing",
         "price": 45000,
         "image": "https://via.placeholder.com/150/87CEEB/FFFFFF?text=Racing"
-    }
+    },
+
+      {
+    "id": "4",
+    "name": "Titular Real Madrid",
+    "price": 50000,
+    "image": "https://via.placeholder.com/150/003366/FFFF00?text=Boca",
+    "bestseller": true,
+    "category": "Liga Española" 
+},
+
+  {
+    "id": "5",
+    "name": "Titular Barcelona",
+    "price": 50000,
+    "image": "https://via.placeholder.com/150/003366/FFFF00?text=Boca"
+}
 ]
