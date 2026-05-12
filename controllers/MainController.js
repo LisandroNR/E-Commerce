@@ -140,8 +140,8 @@ const mainController = {
     // OTRAS VISTAS ESTÁTICAS Y US#5
     // ==========================================
     checkout: (req, res) => { res.render('pages/checkout'); },
-    login: (req, res) => { res.render('pages/login'); },
-    register: (req, res) => { res.render('pages/register'); },
+   login: (req, res) => { res.render('pages/login', { layout: false }); },
+    register: (req, res) => { res.render('pages/register', { layout: false }); },
     error: (req, res) => { res.render('pages/error'); }
 };
 

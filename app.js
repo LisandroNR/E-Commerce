@@ -1,7 +1,7 @@
-// app.js
 const express = require('express');
 const path = require('path');
-const session = require('express-session'); // 1. Importamos express-session
+const session = require('express-session');
+const expressLayouts = require('express-ejs-layouts'); // <-- AGREGAR ESTA LÍNEA
 const app = express();
 
 const mainRoutes = require('./routes/mainRoutes');
@@ -46,8 +46,14 @@ app.use((req, res, next) => {
 // Configuración de EJS y Archivos estáticos
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
 
+// ==========================================
+// CONFIGURACIÓN DE LAYOUTS (US#14)
+// ==========================================
+app.use(expressLayouts);
+app.set('layout', 'layouts/main'); // Le decimos dónde está la plantilla maestra
+
+app.use(express.static(path.join(__dirname, 'public')));
 // Rutas
 app.use('/', mainRoutes);
 

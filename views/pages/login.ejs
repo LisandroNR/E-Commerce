@@ -1,21 +1,35 @@
-<%- include('../partials/header') %>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | Tienda de Camisetas</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh;">
 
-<main style="padding: 50px 5%; min-height: 60vh;">
-    <div class="form-box">
-        <h2 style="text-align: center; margin-bottom: 20px;">Iniciar Sesión</h2>
-        <form action="/" method="GET">
-            <div class="form-group">
-                <input type="email" placeholder="Correo electrónico" required>
-            </div>
-            <div class="form-group">
-                <input type="password" placeholder="Contraseña" required>
-            </div>
-            <button type="submit" class="btn-main">Ingresar</button>
+    <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center;">
+        
+        <h1 style="margin-top: 0; color: #1a1a1a;">Iniciar Sesión</h1>
+        
+        <form action="/login" method="POST" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <input type="email" name="email" placeholder="Correo electrónico" required style="padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+            
+            <input type="password" name="password" placeholder="Contraseña" required style="padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+            
+            <button type="submit" style="padding: 15px; background-color: #00ceb0; color: #1a1a1a; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;">
+                Ingresar
+            </button>
         </form>
-        <p style="margin-top: 20px; text-align: center; font-size: 14px;">
-            ¿No tenés cuenta? <a href="/register" style="color: #00ceb0; font-weight: bold; text-decoration: none;">Registrate acá</a>
-        </p>
-    </div>
-</main>
 
-<%- include('../partials/footer') %>
+        <p style="margin-top: 20px; color: #666;">
+            ¿No tenés cuenta? <a href="/register" style="color: #00ceb0; text-decoration: none; font-weight: bold;">Registrate acá</a>
+        </p>
+        
+        <!-- Botón para volver al inicio por si se arrepienten -->
+        <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
+            <a href="/" style="color: #999; text-decoration: none; font-size: 14px;">🏠 Volver a la tienda</a>
+        </div>
+    </div>
+
+</body>
+</html>
