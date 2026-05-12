@@ -1,20 +1,17 @@
-// Importamos nuestro nuevo servicio
+// Importamos nuestros dos cadetes (servicios)
 const productsService = require('../services/productsService');
+const cartService = require('../services/cartService');
 
 const mainController = {
     // ==========================================
-    // HOME (Sugeridos y Más Pedidos)
+    // VISTAS DE PRODUCTOS
     // ==========================================
     home: (req, res) => { 
         const bestsellers = productsService.getBestsellers(10);
         const suggestedProducts = productsService.getSuggested(5);
-        
         res.render('pages/index', { suggestedProducts, bestsellers }); 
     },
 
-    // ==========================================
-    // DETALLE DE PRODUCTO
-    // ==========================================
     product: (req, res) => { 
         const productId = req.params.id; 
         const product = productsService.getById(productId);
@@ -27,87 +24,45 @@ const mainController = {
         res.render('pages/product', { product, relatedProducts }); 
     },
 
-    // ==========================================
-    // VISTA DE CATEGORÍAS
-    // ==========================================
     category: (req, res) => {
         const categoryName = req.params.category; 
         const filteredProducts = productsService.getByCategory(categoryName);
-
         res.render('pages/category', { categoryName, filteredProducts });
     },
 
     // ==========================================
-    // LÓGICA DEL CARRITO
+    // LÓGICA DEL CARRITO (US#16)
     // ==========================================
     cart: (req, res) => {
-        let cartItems = [];
-        let total = 0;
-
-        if (!req.session.cart) {
-            req.session.cart = [];
-        }
-
-        req.session.cart.forEach(item => {
-            const productData = productsService.getById(item.productId); 
-            if (productData) {
-                const subtotal = productData.price * item.quantity;
-                total += subtotal;
-                cartItems.push({ ...productData, quantity: item.quantity, subtotal });
-            }
-        });
-
+        // Le pedimos al servicio que calcule todo pasándole la sesión
+        const { cartItems, total } = cartService.getCartDetails(req.session);
         res.render('pages/cart', { cartItems, total });
     },
 
     addToCart: (req, res) => {
         const productId = req.body.productId;
-        const productData = productsService.getById(productId);
+        const success = cartService.addProduct(req.session, productId);
 
-        if (!productData || productData.stock === 0) {
+        // Si falló (ej: no hay stock), lo mandamos al inicio. Si no, al carrito.
+        if (!success) {
             return res.redirect('/'); 
-        }
-
-        if (!req.session.cart) {
-            req.session.cart = [];
-        }
-        
-        const cart = req.session.cart;
-        const productIndex = cart.findIndex(p => p.productId == productId);
-
-        if (productIndex !== -1) {
-            cart[productIndex].quantity += 1; 
-        } else {
-            cart.push({ productId: productId, quantity: 1 }); 
         }
         res.redirect('/cart');
     },
 
     updateCart: (req, res) => {
         const { productId, action } = req.body;
-        const cart = req.session.cart || [];
-        const productIndex = cart.findIndex(p => p.productId == productId);
-
-        if (productIndex !== -1) {
-            if (action === 'increase') {
-                cart[productIndex].quantity += 1;
-            } else if (action === 'decrease') {
-                cart[productIndex].quantity -= 1;
-                if (cart[productIndex].quantity <= 0) {
-                    cart.splice(productIndex, 1); 
-                }
-            }
-        }
+        cartService.updateProduct(req.session, productId, action);
         res.redirect('/cart');
     },
 
     emptyCart: (req, res) => {
-        req.session.cart = []; 
+        cartService.emptyCart(req.session);
         res.redirect('/cart');
     },
 
     // ==========================================
-    // OTRAS VISTAS (Con Layout en false para Auth)
+    // OTRAS VISTAS (Auth sin layout)
     // ==========================================
     checkout: (req, res) => { res.render('pages/checkout'); },
     login: (req, res) => { res.render('pages/login', { layout: false }); },
