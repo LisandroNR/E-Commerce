@@ -2,6 +2,20 @@
 const productsService = require('../services/productsService');
 const cartService = require('../services/cartService');
 
+// ==========================================
+// US#17: FUNCIÓN NORMALIZADORA DE IDs
+// ==========================================
+const normalizeId = (id) => {
+    const parsedId = parseInt(id, 10); // Intentamos convertirlo a número entero
+    
+    // Si el resultado es NaN (Not a Number, o sea, eran letras), devolvemos null
+    if (isNaN(parsedId)) {
+        return null;
+    }
+    
+    return parsedId; // Si todo está bien, devolvemos el número limpio
+};
+
 const mainController = {
     // ==========================================
     // VISTAS DE PRODUCTOS
@@ -13,11 +27,21 @@ const mainController = {
     },
 
     product: (req, res) => { 
-        const productId = req.params.id; 
+        const rawId = req.params.id; 
+        
+        // 1. Pasamos el ID por el patovica
+        const productId = normalizeId(rawId);
+
+        // ESCENARIO 1: ID no numérico -> 400 (Bad Request)
+        if (productId === null) {
+            return res.status(400).send('<h1>Error 400: Petición inválida. El ID del producto debe ser numérico.</h1>');
+        }
+
         const product = productsService.getById(productId);
 
+        // ESCENARIO 2: ID numérico pero inexistente -> 404
         if (!product) {
-            return res.render('pages/404');
+            return res.status(404).render('pages/404');
         }
 
         const relatedProducts = productsService.getRelated(product.category, productId, 4);
@@ -31,19 +55,23 @@ const mainController = {
     },
 
     // ==========================================
-    // LÓGICA DEL CARRITO (US#16)
+    // LÓGICA DEL CARRITO
     // ==========================================
     cart: (req, res) => {
-        // Le pedimos al servicio que calcule todo pasándole la sesión
         const { cartItems, total } = cartService.getCartDetails(req.session);
         res.render('pages/cart', { cartItems, total });
     },
 
     addToCart: (req, res) => {
-        const productId = req.body.productId;
-        const success = cartService.addProduct(req.session, productId);
+        const rawId = req.body.productId;
+        const productId = normalizeId(rawId);
 
-        // Si falló (ej: no hay stock), lo mandamos al inicio. Si no, al carrito.
+        // Validación de seguridad para el carrito (400)
+        if (productId === null) {
+            return res.status(400).send('Error 400: ID inválido.');
+        }
+
+        const success = cartService.addProduct(req.session, productId);
         if (!success) {
             return res.redirect('/'); 
         }
@@ -51,8 +79,14 @@ const mainController = {
     },
 
     updateCart: (req, res) => {
-        const { productId, action } = req.body;
-        cartService.updateProduct(req.session, productId, action);
+        const rawId = req.body.productId;
+        const action = req.body.action;
+        const productId = normalizeId(rawId);
+
+        // Solo actualiza si el ID es un número válido
+        if (productId !== null) {
+            cartService.updateProduct(req.session, productId, action);
+        }
         res.redirect('/cart');
     },
 
