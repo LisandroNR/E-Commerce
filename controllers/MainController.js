@@ -1,71 +1,46 @@
-const fs = require('fs');
-const path = require('path');
-
-// Función para leer el JSON de productos
-const getProducts = () => {
-    const productsFilePath = path.join(__dirname, '../models/products.json');
-    return JSON.parse(fs.readFileSync(productsFilePath, 'utf-8'));
-};
+// Importamos nuestro nuevo servicio
+const productsService = require('../services/productsService');
 
 const mainController = {
     // ==========================================
-    // US#6 y US#7 - HOME (Sugeridos y Más Pedidos)
+    // HOME (Sugeridos y Más Pedidos)
     // ==========================================
     home: (req, res) => { 
-        const products = getProducts();
+        const bestsellers = productsService.getBestsellers(10);
+        const suggestedProducts = productsService.getSuggested(5);
         
-        const bestsellers = products.filter(product => product.bestseller === true);
-        const bestsellersShuffled = bestsellers.sort(() => 0.5 - Math.random());
-        const topBestsellers = bestsellersShuffled.slice(0, 10);
-
-        const shuffled = products.sort(() => 0.5 - Math.random());
-        const suggestedProducts = shuffled.slice(0, 5);
-        
-        res.render('pages/index', { suggestedProducts, bestsellers: topBestsellers }); 
+        res.render('pages/index', { suggestedProducts, bestsellers }); 
     },
 
     // ==========================================
-    // US#8 y US#9 - DETALLE DE PRODUCTO
+    // DETALLE DE PRODUCTO
     // ==========================================
     product: (req, res) => { 
-        const products = getProducts();
         const productId = req.params.id; 
-        
-        const product = products.find(p => p.id == productId);
+        const product = productsService.getById(productId);
 
         if (!product) {
             return res.render('pages/404');
         }
 
-        let relatedProducts = [];
-        if (product.category) {
-            const related = products.filter(p => p.category === product.category && p.id != productId);
-            const relatedShuffled = related.sort(() => 0.5 - Math.random());
-            relatedProducts = relatedShuffled.slice(0, 4);
-        }
-
+        const relatedProducts = productsService.getRelated(product.category, productId, 4);
         res.render('pages/product', { product, relatedProducts }); 
     },
 
     // ==========================================
-    // US#10: VISTA DE CATEGORÍAS (La que tiraba error)
+    // VISTA DE CATEGORÍAS
     // ==========================================
     category: (req, res) => {
-        const products = getProducts();
         const categoryName = req.params.category; 
-
-        const filteredProducts = products.filter(p => 
-            p.category && p.category.toLowerCase() === categoryName.toLowerCase()
-        );
+        const filteredProducts = productsService.getByCategory(categoryName);
 
         res.render('pages/category', { categoryName, filteredProducts });
     },
 
     // ==========================================
-    // LÓGICA DEL CARRITO (US#4)
+    // LÓGICA DEL CARRITO
     // ==========================================
     cart: (req, res) => {
-        const products = getProducts();
         let cartItems = [];
         let total = 0;
 
@@ -74,7 +49,7 @@ const mainController = {
         }
 
         req.session.cart.forEach(item => {
-            const productData = products.find(p => p.id == item.productId); 
+            const productData = productsService.getById(item.productId); 
             if (productData) {
                 const subtotal = productData.price * item.quantity;
                 total += subtotal;
@@ -87,17 +62,12 @@ const mainController = {
 
     addToCart: (req, res) => {
         const productId = req.body.productId;
-        const products = getProducts();
-        
-        // 1. Buscamos el producto en la base de datos
-        const productData = products.find(p => p.id == productId);
+        const productData = productsService.getById(productId);
 
-        // 2. VALIDACIÓN US#11: Si no existe o tiene stock 0, rechazamos la acción
         if (!productData || productData.stock === 0) {
-            return res.redirect('/'); // Lo devolvemos al inicio sin agregar nada
+            return res.redirect('/'); 
         }
 
-        // Si pasó la validación, sigue el proceso normal del carrito
         if (!req.session.cart) {
             req.session.cart = [];
         }
@@ -137,10 +107,10 @@ const mainController = {
     },
 
     // ==========================================
-    // OTRAS VISTAS ESTÁTICAS Y US#5
+    // OTRAS VISTAS (Con Layout en false para Auth)
     // ==========================================
     checkout: (req, res) => { res.render('pages/checkout'); },
-   login: (req, res) => { res.render('pages/login', { layout: false }); },
+    login: (req, res) => { res.render('pages/login', { layout: false }); },
     register: (req, res) => { res.render('pages/register', { layout: false }); },
     error: (req, res) => { res.render('pages/error'); }
 };
