@@ -25,6 +25,25 @@ const mainController = {
         const suggestedProducts = productsService.getSuggested(5);
         res.render('pages/index', { suggestedProducts, bestsellers }); 
     },
+    // ==========================================
+    // LISTA DE TODOS LOS PRODUCTOS CON ORDENAMIENTO (US#18)
+    // ==========================================
+    productsList: (req, res) => {
+        // req.query atrapa todo lo que va después del "?" en la URL
+        const sortOrder = req.query.sort; 
+        let products;
+
+        // Si la URL tiene ?sort=asc o ?sort=desc, usamos el nuevo servicio
+        if (sortOrder === 'asc' || sortOrder === 'desc') {
+            products = productsService.getSorted(sortOrder);
+        } else {
+            // Si entraron a /products a secas, mostramos todos sin ordenar
+            products = productsService.getAll();
+        }
+
+        // Mandamos los productos y el sortOrder a la vista para saber qué botón pintar
+        res.render('pages/products', { products, sortOrder });
+    },
 
     product: (req, res) => { 
         const rawId = req.params.id; 

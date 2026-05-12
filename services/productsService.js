@@ -9,7 +9,21 @@ const productsService = {
     getAll: () => {
         return JSON.parse(fs.readFileSync(productsFilePath, 'utf-8'));
     },
-
+// 7. Traer todos los productos ordenados (US#18)
+    getSorted: (sortOrder) => {
+        const products = productsService.getAll();
+        
+        if (sortOrder === 'asc') {
+            // Menor a mayor precio
+            return products.sort((a, b) => a.price - b.price);
+        } else if (sortOrder === 'desc') {
+            // Mayor a menor precio
+            return products.sort((a, b) => b.price - a.price);
+        }
+        
+        // Si no mandan nada raro, los devolvemos como vienen
+        return products;
+    },
     // 2. Traer un producto por su ID
     getById: (id) => {
         const products = productsService.getAll();
