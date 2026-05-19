@@ -58,6 +58,16 @@ const productsService = {
         const related = products.filter(p => p.category === category && p.id != excludeId);
         const shuffled = related.sort(() => 0.5 - Math.random());
         return shuffled.slice(0, limit);
+    },
+
+    // 8. Buscador de productos por nombre (US#19)
+    search: (query) => {
+        const products = productsService.getAll();
+        // Pasamos a minúsculas lo que escribió el usuario para que la búsqueda no falle por mayúsculas
+        const lowerCaseQuery = query.toLowerCase(); 
+        
+        // Filtramos buscando si el nombre del producto "incluye" el texto escrito
+        return products.filter(product => product.name.toLowerCase().includes(lowerCaseQuery));
     }
 };
 

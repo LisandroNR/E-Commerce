@@ -1,0 +1,28 @@
+<main style="padding: 40px 5%; max-width: 1200px; margin: 0 auto; min-height: 70vh;">
+    <h1 style="text-align: center; color: #1a1a1a; margin-bottom: 30px;">
+        Resultados para: "<span style="color: #00ceb0;"><%= searchQuery %></span>"
+    </h1>
+
+    <% if (searchResults && searchResults.length > 0) { %>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px;">
+            <% searchResults.forEach(product => { %>
+                <div style="background: white; border: 1px solid #eee; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s;">
+                    <img src="<%= product.image %>" alt="<%= product.name %>" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
+                    <h3 style="font-size: 18px; margin: 0 0 10px; color: #333;"><%= product.name %></h3>
+                    <p style="font-size: 22px; font-weight: bold; color: #ff4444; margin: 0 0 20px;">$<%= product.price %></p>
+                    <a href="/product/<%= product.id %>" style="display: block; padding: 12px; background-color: #1a1a1a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background-color 0.3s;">
+                        Ver Detalle
+                    </a>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <div style="text-align: center; padding: 50px; background: white; border-radius: 15px; border: 2px dashed #ccc;">
+            <p style="font-size: 24px; color: #666; margin-bottom: 20px;">No encontramos productos que coincidan con tu búsqueda.</p>
+            <p style="color: #999; margin-bottom: 30px;">Intentá usar palabras más generales o revisá la ortografía.</p>
+            <a href="/products" style="display: inline-block; padding: 10px 25px; background-color: #1a1a1a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                Ver todo el catálogo
+            </a>
+        </div>
+    <% } %>
+</main>

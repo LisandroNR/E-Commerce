@@ -18,10 +18,10 @@
                 </a>
             </div>
 
-            <div class="search-bar">
-                <input type="search" placeholder="Buscar tu camiseta..." aria-label="Buscador">
-                <button type="button"><i class="fas fa-search"></i></button>
-            </div>
+            <form action="/search" method="GET" class="search-bar">
+                <input type="search" name="query" placeholder="Buscar tu camiseta..." aria-label="Buscador" required>
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
 
             <div class="user-actions">
                 <a href="/">Inicio</a>

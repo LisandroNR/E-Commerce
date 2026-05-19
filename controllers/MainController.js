@@ -45,6 +45,21 @@ const mainController = {
         res.render('pages/products', { products, sortOrder });
     },
 
+    // ==========================================
+    // BUSCADOR DE PRODUCTOS (US#19)
+    // ==========================================
+    search: (req, res) => {
+        const searchQuery = req.query.query; // Atrapa lo que viene en ?query=...
+        let searchResults = [];
+
+        if (searchQuery) {
+            searchResults = productsService.search(searchQuery);
+        }
+
+        // Le mandamos a la vista los resultados y la palabra que buscó el usuario
+        res.render('pages/search', { searchResults, searchQuery });
+    },
+
     product: (req, res) => { 
         const rawId = req.params.id; 
         
