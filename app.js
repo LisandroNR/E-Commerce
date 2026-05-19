@@ -28,19 +28,13 @@ app.use((req, res, next) => {
 // ==========================================
 // US#12: MIDDLEWARE PARA EL CONTADOR DEL CARRITO
 // ==========================================
-// Este código se ejecuta en TODAS las páginas antes de mostrarlas
 app.use((req, res, next) => {
     let cartItemCount = 0;
-    
-    // Si la sesión existe y hay un carrito creado...
     if (req.session && req.session.cart) {
-        // Sumamos las cantidades de todos los productos
         cartItemCount = req.session.cart.reduce((total, item) => total + item.quantity, 0);
     }
-    
-    // Lo guardamos en "res.locals" para que cualquier archivo .ejs lo pueda usar
     res.locals.cartItemCount = cartItemCount;
-    next(); // Le decimos a Express que siga su camino
+    next();
 });
 
 // Configuración de EJS y Archivos estáticos
@@ -57,9 +51,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rutas
 app.use('/', mainRoutes);
 
-// RED DE CONTENCIÓN: Error 404
+// RED DE CONTENCIÓN: Error 404 (Si no encuentra la ruta)
 app.use((req, res, next) => {
     res.status(404).render('pages/404');
+});
+
+// ==========================================
+// US#13: RED DE CONTENCIÓN: Error 500 (Si falla el código)
+// ==========================================
+app.use((err, req, res, next) => {
+    // Imprimimos el error en consola para nosotros (los devs)
+    console.error("🔥 ERROR INTERNO:");
+    console.error(err.stack);
+    
+    // Mostramos la vista amigable al usuario
+    res.status(500).render('pages/500');
 });
 
 // Levantar el Servidor
