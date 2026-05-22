@@ -3,17 +3,27 @@ const productsService = require('../services/productsService');
 const cartService = require('../services/cartService');
 
 // ==========================================
-// US#17: FUNCIÓN NORMALIZADORA DE IDs
+// US#5: FUNCIÓN NORMALIZADORA DE IDs (RECARGADA)
 // ==========================================
-const normalizeId = (id) => {
-    const parsedId = parseInt(id, 10); // Intentamos convertirlo a número entero
+// Ahora recibe la respuesta (res) para poder mandar los errores directamente
+const normalizeId = (id, res) => {
+    const parsedId = parseInt(id, 10); 
     
-    // Si el resultado es NaN (Not a Number, o sea, eran letras), devolvemos null
+    // 1. Validar que es numérico (si no, tira 400)
     if (isNaN(parsedId)) {
+        res.status(400).send('<h1>Error 400: Petición inválida. El ID del producto debe ser numérico.</h1>');
         return null;
     }
     
-    return parsedId; // Si todo está bien, devolvemos el número limpio
+    // 2. Validar que el producto existe en SQLite (si no, tira 404)
+    const product = productsService.getById(parsedId);
+    if (!product) {
+        res.status(404).render('pages/404');
+        return null;
+    }
+    
+    // Si sobrevive a las dos validaciones, devolvemos el número limpio
+    return parsedId; 
 };
 
 const mainController = {
@@ -25,60 +35,42 @@ const mainController = {
         const suggestedProducts = productsService.getSuggested(5);
         res.render('pages/index', { suggestedProducts, bestsellers }); 
     },
-    // ==========================================
-    // LISTA DE TODOS LOS PRODUCTOS CON ORDENAMIENTO (US#18)
-    // ==========================================
+    
     productsList: (req, res) => {
-        // req.query atrapa todo lo que va después del "?" en la URL
         const sortOrder = req.query.sort; 
         let products;
 
-        // Si la URL tiene ?sort=asc o ?sort=desc, usamos el nuevo servicio
         if (sortOrder === 'asc' || sortOrder === 'desc') {
             products = productsService.getSorted(sortOrder);
         } else {
-            // Si entraron a /products a secas, mostramos todos sin ordenar
             products = productsService.getAll();
         }
 
-        // Mandamos los productos y el sortOrder a la vista para saber qué botón pintar
         res.render('pages/products', { products, sortOrder });
     },
 
-    // ==========================================
-    // BUSCADOR DE PRODUCTOS (US#19)
-    // ==========================================
     search: (req, res) => {
-        const searchQuery = req.query.query; // Atrapa lo que viene en ?query=...
+        const searchQuery = req.query.query; 
         let searchResults = [];
 
         if (searchQuery) {
             searchResults = productsService.search(searchQuery);
         }
 
-        // Le mandamos a la vista los resultados y la palabra que buscó el usuario
         res.render('pages/search', { searchResults, searchQuery });
     },
 
     product: (req, res) => { 
         const rawId = req.params.id; 
         
-        // 1. Pasamos el ID por el patovica
-        const productId = normalizeId(rawId);
+        // El patovica ahora hace el chequeo completo. Si falla, corta acá.
+        const productId = normalizeId(rawId, res);
+        if (!productId) return; 
 
-        // ESCENARIO 1: ID no numérico -> 400 (Bad Request)
-        if (productId === null) {
-            return res.status(400).send('<h1>Error 400: Petición inválida. El ID del producto debe ser numérico.</h1>');
-        }
-
+        // Si pasó el control, ya sabemos que es número y que existe.
         const product = productsService.getById(productId);
-
-        // ESCENARIO 2: ID numérico pero inexistente -> 404
-        if (!product) {
-            return res.status(404).render('pages/404');
-        }
-
         const relatedProducts = productsService.getRelated(product.category, productId, 4);
+        
         res.render('pages/product', { product, relatedProducts }); 
     },
 
@@ -98,12 +90,10 @@ const mainController = {
 
     addToCart: (req, res) => {
         const rawId = req.body.productId;
-        const productId = normalizeId(rawId);
-
-        // Validación de seguridad para el carrito (400)
-        if (productId === null) {
-            return res.status(400).send('Error 400: ID inválido.');
-        }
+        
+        // Validación unificada
+        const productId = normalizeId(rawId, res);
+        if (!productId) return; 
 
         const success = cartService.addProduct(req.session, productId);
         if (!success) {
@@ -115,12 +105,12 @@ const mainController = {
     updateCart: (req, res) => {
         const rawId = req.body.productId;
         const action = req.body.action;
-        const productId = normalizeId(rawId);
+        
+        // Validación unificada
+        const productId = normalizeId(rawId, res);
+        if (!productId) return;
 
-        // Solo actualiza si el ID es un número válido
-        if (productId !== null) {
-            cartService.updateProduct(req.session, productId, action);
-        }
+        cartService.updateProduct(req.session, productId, action);
         res.redirect('/cart');
     },
 
