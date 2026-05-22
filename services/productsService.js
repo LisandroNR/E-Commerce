@@ -26,13 +26,12 @@ const productsService = {
         return query.all(`%${searchQuery}%`);
     },
 
-    // 5. Ordenar por precio (Menor a Mayor / Mayor a Menor)
-    getSortedByPrice: (order = 'asc') => {
+   // 5. Ordenar por precio (Menor a Mayor / Mayor a Menor)
+    getSorted: (order = 'asc') => { // <--- ACÁ LE CAMBIAMOS EL NOMBRE
         const direction = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
         const query = db.prepare(`SELECT * FROM products ORDER BY price ${direction}`);
         return query.all();
     },
-
   // 6. Obtener productos relacionados (Misma categoría, excluyendo el actual)
     getRelated: (category, currentId, limit = 4) => {
         const query = db.prepare('SELECT * FROM products WHERE category = ? AND id != ? LIMIT ?');
