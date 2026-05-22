@@ -1,4 +1,5 @@
 const express = require('express');
+const db = require('./db/database');
 const path = require('path');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts'); // <-- AGREGAR ESTA LÍNEA
