@@ -13,8 +13,8 @@ const productsService = {
         return query.get(id);
     },
 
-    // 3. Filtrar por categoría
-    filterByCategory: (category) => {
+    // 3. Filtrar por categoría (Corregido a getByCategory para coincidir con el controlador)
+    getByCategory: (category) => {
         const query = db.prepare('SELECT * FROM products WHERE category = ?');
         return query.all(category);
     },
@@ -26,13 +26,14 @@ const productsService = {
         return query.all(`%${searchQuery}%`);
     },
 
-   // 5. Ordenar por precio (Menor a Mayor / Mayor a Menor)
-    getSorted: (order = 'asc') => { // <--- ACÁ LE CAMBIAMOS EL NOMBRE
+    // 5. Ordenar por precio (Menor a Mayor / Mayor a Menor)
+    getSorted: (order = 'asc') => { 
         const direction = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
         const query = db.prepare(`SELECT * FROM products ORDER BY price ${direction}`);
         return query.all();
     },
-  // 6. Obtener productos relacionados (Misma categoría, excluyendo el actual)
+
+    // 6. Obtener productos relacionados (Misma categoría, excluyendo el actual)
     getRelated: (category, currentId, limit = 4) => {
         const query = db.prepare('SELECT * FROM products WHERE category = ? AND id != ? LIMIT ?');
         return query.all(category, currentId, limit);
@@ -46,10 +47,9 @@ const productsService = {
 
     // 8. Obtener productos sugeridos
     getSuggested: (limit = 8) => {
-        // Podemos hacer que traiga otros distintos, pero por ahora lo mantenemos simple para que no rompa
         const query = db.prepare('SELECT * FROM products LIMIT ?');
         return query.all(limit);
     }
-}; // <--- No te olvides de esta llave que cerramos antes
+};
 
 module.exports = productsService;
