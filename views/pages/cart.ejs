@@ -11,7 +11,7 @@
         <div style="display: flex; flex-direction: column; gap: 15px;">
             <% cartItems.forEach(item => { %>
                 <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
-                    <img src="<%= item.image %>" alt="<%= item.name %>" style="width: 80px; border-radius: 5px;">
+                   <img src="<%= item.image ? '/images/' + item.image.replace('/images/', '').replace('images/', '') : '' %>" alt="<%= item.name %>" style="width: 80px; border-radius: 5px;">
                     <div style="flex: 1; margin-left: 20px;">
                         <h3><%= item.name %></h3>
                         <p>Precio Unitario: $<%= item.price %></p>

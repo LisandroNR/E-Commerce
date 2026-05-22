@@ -30,24 +30,27 @@ const mainController = {
     // ==========================================
     // VISTAS DE PRODUCTOS
     // ==========================================
-    home: (req, res) => { 
-        const bestsellers = productsService.getBestsellers(10);
+  home: (req, res) => { 
+        // Cambiamos el 10 por un 5 aquí mismo
+        const bestsellers = productsService.getBestsellers(5);
         const suggestedProducts = productsService.getSuggested(5);
         res.render('pages/index', { suggestedProducts, bestsellers }); 
     },
-    
-    productsList: (req, res) => {
-        const sortOrder = req.query.sort; 
-        let products;
+productsList: (req, res) => {
+    const sortOrder = req.query.sort;
+    const category = req.query.category; // ← AGREGAR ESTO
+    let products;
 
-        if (sortOrder === 'asc' || sortOrder === 'desc') {
-            products = productsService.getSorted(sortOrder);
-        } else {
-            products = productsService.getAll();
-        }
+    if (category) {
+        products = productsService.getByCategory(category); // ← filtrar por categoría
+    } else if (sortOrder === 'asc' || sortOrder === 'desc') {
+        products = productsService.getSorted(sortOrder);
+    } else {
+        products = productsService.getAll();
+    }
 
-        res.render('pages/products', { products, sortOrder });
-    },
+    res.render('pages/products', { products, sortOrder: sortOrder || null, category: category || null });
+},
 
     search: (req, res) => {
         const searchQuery = req.query.query; 
@@ -60,7 +63,7 @@ const mainController = {
         res.render('pages/search', { searchResults, searchQuery });
     },
 
-    product: (req, res) => { 
+ product: (req, res) => { 
         const rawId = req.params.id; 
         
         // El patovica ahora hace el chequeo completo. Si falla, corta acá.
@@ -69,7 +72,15 @@ const mainController = {
 
         // Si pasó el control, ya sabemos que es número y que existe.
         const product = productsService.getById(productId);
-        const relatedProducts = productsService.getRelated(product.category, productId, 4);
+        
+        // --- AQUÍ ESTÁ EL FILTRO PARA LIMPIAR LOS RELACIONADOS ---
+        let relatedProducts = productsService.getRelated(product.category, productId, 4);
+        
+       relatedProducts = relatedProducts.filter(p => 
+            !p.name.includes('Racing') && 
+            !p.name.includes('Barcelona')
+        );
+        // ---------------------------------------------------------
         
         res.render('pages/product', { product, relatedProducts }); 
     },

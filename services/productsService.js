@@ -39,17 +39,17 @@ const productsService = {
         return query.all(category, currentId, limit);
     },
 
-    // 7. Obtener productos más vendidos
-    getBestsellers: (limit = 4) => {
-        const query = db.prepare('SELECT * FROM products LIMIT ?');
-        return query.all(limit);
-    },
+// 7. Obtener productos más vendidos
+getBestsellers: (limit = 4) => {
+    const query = db.prepare('SELECT * FROM products LIMIT ?');
+    return query.all(limit);
+},
 
-    // 8. Obtener productos sugeridos
-    getSuggested: (limit = 8) => {
-        const query = db.prepare('SELECT * FROM products LIMIT ?');
-        return query.all(limit);
-    }
+// 8. Obtener productos sugeridos
+getSuggested: (limit = 8) => {
+    const query = db.prepare('SELECT * FROM products ORDER BY id DESC LIMIT ? OFFSET 5');
+    return query.all(limit);
+},
 };
 
 module.exports = productsService;
