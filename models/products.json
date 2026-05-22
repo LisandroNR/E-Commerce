@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "name": "Titular Boca Juniors",
+    "price": 50000,
+    "image": "/images/CamisetaBOCA.png",
+    "bestseller": true,
+    "category": "Liga Argentina",
+    "description": "La camiseta titular del Xeneize. Confeccionada con tela transpirable ideal para alentar en La Bombonera o jugar con amigos.",
+    "stock": 10 
+},
+    {
+        "id": "2",
+        "name": "Camiseta Titular River Plate",
+        "price": 50000,
+        "image": "/images/Riber.png",
+        "bestseller": true,
+        "category": "Liga Argentina",
+        "description": "La camiseta titular del Millonario. Confeccionada con tela transpirable ideal para alentar en el Mudomental o jugar con amigos.",
+        "stock": 0 
+    },
+    {
+        "id": "3",
+        "name": "Camiseta Titular Racing",
+        "price": 45000,
+        "image": "https://via.placeholder.com/150/87CEEB/FFFFFF?text=Racing"
+    },
+
+      {
+    "id": "4",
+    "name": "Titular Real Madrid",
+    "price": 50000,
+    "image": "/images/CamisetaReal.png",
+    "bestseller": true,
+    "category": "Liga Española",
+    "description": "La camiseta titular del Merengue. Confeccionada con tela transpirable ideal para alentar en el Santiago Bernabeu o jugar con amigos.",
+     "stock": 10 
+},
+
+  {
+    "id": "5",
+    "name": "Titular Barcelona",
+    "price": 50000,
+    "image": "https://via.placeholder.com/150/003366/FFFF00?text=Boca"
+}
+]

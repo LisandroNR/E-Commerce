@@ -4,15 +4,13 @@ CREATE TABLE IF NOT EXISTS categories (
     name TEXT NOT NULL
 );
 
--- Tabla de Productos
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT,
     price REAL NOT NULL,
     image TEXT,
-    category_id INTEGER,
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    category TEXT -- <--- AGREGAMOS ESTA LÍNEA
 );
 
 -- Tabla de Usuarios (Vacía por ahora, la usaremos en el Sprint 4)

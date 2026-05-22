@@ -8,11 +8,11 @@ console.log('Iniciando migración de datos de JSON a SQLite...');
 const jsonPath = path.join(__dirname, '../models/products.json');
 const productsJSON = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
-// 2. Preparamos la orden de inserción SQL
+// 2. Preparamos la orden de inserción SQL incluyendo la categoría
 // Usamos @nombreDeVariable para que better-sqlite3 asigne los valores automáticamente
 const insertProduct = db.prepare(`
-    INSERT OR IGNORE INTO products (id, name, description, price, image) 
-    VALUES (@id, @name, @description, @price, @image)
+    INSERT OR IGNORE INTO products (id, name, description, price, image, category) 
+    VALUES (@id, @name, @description, @price, @image, @category)
 `);
 
 // 3. Hacemos la inserción de forma masiva (transaction lo hace súper rápido)
@@ -24,7 +24,8 @@ const migrate = db.transaction((products) => {
             // Si algún producto no tiene descripción, le ponemos un texto por defecto para que no falle
             description: prod.description || 'Sin descripción', 
             price: prod.price,
-            image: prod.image
+            image: prod.image,
+            category: prod.category // <-- Agregamos la categoría aquí para la migración
         });
     }
 });

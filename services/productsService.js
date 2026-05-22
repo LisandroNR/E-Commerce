@@ -1,74 +1,56 @@
-const fs = require('fs');
-const path = require('path');
-
-// Ubicación de nuestra base de datos (JSON)
-const productsFilePath = path.join(__dirname, '../models/products.json');
+const db = require('../db/database');
 
 const productsService = {
-    // 1. Traer TODOS los productos
+    // 1. Obtener todos los productos desde SQLite
     getAll: () => {
-        return JSON.parse(fs.readFileSync(productsFilePath, 'utf-8'));
+        const query = db.prepare('SELECT * FROM products');
+        return query.all();
     },
-// 7. Traer todos los productos ordenados (US#18)
-    getSorted: (sortOrder) => {
-        const products = productsService.getAll();
-        
-        if (sortOrder === 'asc') {
-            // Menor a mayor precio
-            return products.sort((a, b) => a.price - b.price);
-        } else if (sortOrder === 'desc') {
-            // Mayor a menor precio
-            return products.sort((a, b) => b.price - a.price);
-        }
-        
-        // Si no mandan nada raro, los devolvemos como vienen
-        return products;
-    },
-    // 2. Traer un producto por su ID
+
+    // 2. Obtener un producto por ID
     getById: (id) => {
-        const products = productsService.getAll();
-        return products.find(p => p.id == id);
+        const query = db.prepare('SELECT * FROM products WHERE id = ?');
+        return query.get(id);
     },
 
-    // 3. Traer productos de una categoría específica
-    getByCategory: (category) => {
-        const products = productsService.getAll();
-        return products.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase());
+    // 3. Filtrar por categoría
+    filterByCategory: (category) => {
+        const query = db.prepare('SELECT * FROM products WHERE category = ?');
+        return query.all(category);
     },
 
-    // 4. Traer los más vendidos (mezclados)
-    getBestsellers: (limit) => {
-        const products = productsService.getAll();
-        const bestsellers = products.filter(p => p.bestseller === true);
-        const shuffled = bestsellers.sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, limit);
+    // 4. Buscar por nombre (Coincidencia parcial - US#19)
+    search: (searchQuery) => {
+        const query = db.prepare('SELECT * FROM products WHERE name LIKE ?');
+        // El % le dice a SQL que busque cualquier texto antes o después de la palabra
+        return query.all(`%${searchQuery}%`);
     },
 
-    // 5. Traer productos sugeridos (mezclados)
-    getSuggested: (limit) => {
-        const products = productsService.getAll();
-        const shuffled = products.sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, limit);
+    // 5. Ordenar por precio (Menor a Mayor / Mayor a Menor)
+    getSortedByPrice: (order = 'asc') => {
+        const direction = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
+        const query = db.prepare(`SELECT * FROM products ORDER BY price ${direction}`);
+        return query.all();
     },
 
-    // 6. Traer productos relacionados (misma categoría, excluyendo el actual)
-    getRelated: (category, excludeId, limit) => {
-        if (!category) return [];
-        const products = productsService.getAll();
-        const related = products.filter(p => p.category === category && p.id != excludeId);
-        const shuffled = related.sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, limit);
+  // 6. Obtener productos relacionados (Misma categoría, excluyendo el actual)
+    getRelated: (category, currentId, limit = 4) => {
+        const query = db.prepare('SELECT * FROM products WHERE category = ? AND id != ? LIMIT ?');
+        return query.all(category, currentId, limit);
     },
 
-    // 8. Buscador de productos por nombre (US#19)
-    search: (query) => {
-        const products = productsService.getAll();
-        // Pasamos a minúsculas lo que escribió el usuario para que la búsqueda no falle por mayúsculas
-        const lowerCaseQuery = query.toLowerCase(); 
-        
-        // Filtramos buscando si el nombre del producto "incluye" el texto escrito
-        return products.filter(product => product.name.toLowerCase().includes(lowerCaseQuery));
+    // 7. Obtener productos más vendidos
+    getBestsellers: (limit = 4) => {
+        const query = db.prepare('SELECT * FROM products LIMIT ?');
+        return query.all(limit);
+    },
+
+    // 8. Obtener productos sugeridos
+    getSuggested: (limit = 8) => {
+        // Podemos hacer que traiga otros distintos, pero por ahora lo mantenemos simple para que no rompa
+        const query = db.prepare('SELECT * FROM products LIMIT ?');
+        return query.all(limit);
     }
-};
+}; // <--- No te olvides de esta llave que cerramos antes
 
 module.exports = productsService;
