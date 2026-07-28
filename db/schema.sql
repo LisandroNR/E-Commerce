@@ -3,14 +3,16 @@ CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
 );
-
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    description TEXT,
-    price REAL NOT NULL,
+    price INTEGER DEFAULT 0,
+    category TEXT,
     image TEXT,
-    category TEXT -- <--- AGREGAMOS ESTA LÍNEA
+    -- Las tres columnas nuevas del Dashboard:
+    stock INTEGER DEFAULT 0,
+    description TEXT,
+    store TEXT
 );
 
 -- Tabla de Usuarios (Vacía por ahora, la usaremos en el Sprint 4)

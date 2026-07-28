@@ -12,11 +12,20 @@
         <h2 style="margin-bottom: 30px; border-left: 5px solid #00ceb0; padding-left: 15px;">Los más pedidos</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
             
-            <% bestsellers.forEach(product => { %>
+            <% bestsellers.forEach(product => { 
+                // Lógica inteligente para las imágenes
+                let rawImage = product.image ? product.image : 'https://via.placeholder.com/150/CCCCCC/000000?text=Sin+Imagen';
+                let finalImage = rawImage;
+                
+                if (!rawImage.startsWith('http')) {
+                    let cleanPath = rawImage.replace(/^\/+/, '').replace(/^images\//, '').replace(/^\/+/, '');
+                    finalImage = '/images/' + cleanPath;
+                }
+            %>
                 <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-top: 3px solid #ffaa00; position: relative;">
                     
                     <a href="/products/<%= product.id %>" style="text-decoration: none; color: inherit;">
-                        <img src="<%= product.image ? '/images/' + product.image.replace('/images/', '').replace('images/', '') : 'https://via.placeholder.com/150/CCCCCC/000000?text=Sin+Imagen' %>" alt="<%= product.name %>" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
+                        <img src="<%= finalImage %>" alt="<%= product.name %>" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
                         
                         <span style="background-color: #ffaa00; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; position: absolute; top: 15px; left: 15px;">🔥 Top Ventas</span>
                         
@@ -47,11 +56,20 @@
         <h2 style="margin-bottom: 30px; border-left: 5px solid #00ceb0; padding-left: 15px;">Te puede interesar</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
             
-            <% suggestedProducts.forEach(product => { %>
+            <% suggestedProducts.forEach(product => { 
+                // Lógica inteligente para las imágenes
+                let rawImage = product.image ? product.image : 'https://via.placeholder.com/150/CCCCCC/000000?text=Sin+Imagen';
+                let finalImage = rawImage;
+                
+                if (!rawImage.startsWith('http')) {
+                    let cleanPath = rawImage.replace(/^\/+/, '').replace(/^images\//, '').replace(/^\/+/, '');
+                    finalImage = '/images/' + cleanPath;
+                }
+            %>
                 <article style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative;">
                     
                     <a href="/products/<%= product.id %>" style="text-decoration: none; color: inherit;">
-                        <img src="<%= product.image ? '/images/' + product.image.replace('/images/', '').replace('images/', '') : 'https://via.placeholder.com/150/CCCCCC/000000?text=Sin+Imagen' %>" alt="<%= product.name %>" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
+                        <img src="<%= finalImage %>" alt="<%= product.name %>" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
                         
                         <% if (product.stock === 0) { %>
                             <span style="background-color: #ff4444; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; position: absolute; top: 15px; right: 15px; z-index: 10;">🚫 Sin Stock</span>

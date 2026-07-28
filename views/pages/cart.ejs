@@ -9,9 +9,17 @@
         </div>
     <% } else { %>
         <div style="display: flex; flex-direction: column; gap: 15px;">
-            <% cartItems.forEach(item => { %>
+            <% cartItems.forEach(item => { 
+                // Lógica inteligente para las imágenes del carrito
+                let rawCartImage = item.image ? item.image : 'https://via.placeholder.com/80/CCCCCC/000000?text=Sin+Imagen';
+                let finalCartImage = rawCartImage;
+                if (!rawCartImage.startsWith('http')) {
+                    let cleanCartPath = rawCartImage.replace(/^\/+/, '').replace(/^images\//, '').replace(/^\/+/, '');
+                    finalCartImage = '/images/' + cleanCartPath;
+                }
+            %>
                 <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
-                   <img src="<%= item.image ? '/images/' + item.image.replace('/images/', '').replace('images/', '') : '' %>" alt="<%= item.name %>" style="width: 80px; border-radius: 5px;">
+                    <img src="<%= finalCartImage %>" alt="<%= item.name %>" style="width: 80px; border-radius: 5px;">
                     <div style="flex: 1; margin-left: 20px;">
                         <h3><%= item.name %></h3>
                         <p>Precio Unitario: $<%= item.price %></p>
