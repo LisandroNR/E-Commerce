@@ -1,4 +1,4 @@
-# 👕 Tienda de Camisetas - Backend & E-Commerce Público (Sprint 5 / Final)
+# 👕 Tienda de Camisetas - Backend & E-Commerce Público (Sprint / Final)
 
 ¡Bienvenido al repositorio principal de la Tienda de Camisetas! Este proyecto representa el núcleo de nuestra plataforma de comercio electrónico. En esta etapa final, el sistema evolucionó para funcionar en dos frentes simultáneos: como una tienda pública completa renderizada del lado del servidor y como una **API REST** robusta que alimenta al panel de administrador externo.
 
